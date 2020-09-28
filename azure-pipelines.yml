@@ -1,0 +1,8 @@
+trigger:
+  branches:
+    include: [master, test-*]
+  tags:
+    include: ['*']
+
+jobs:
+  - template: jobs/pre-commit.yml

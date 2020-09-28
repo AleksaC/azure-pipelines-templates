@@ -1,0 +1,37 @@
+parameters:
+  ruby: '>= 2.4'
+  python: '3.8'
+  push_autofixes: true
+
+jobs:
+  - job: precommit
+    displayName: pre-commit
+    pool:
+      vmImage: ubuntu-18.04
+    variables:
+      PRE_COMMIT_HOME: $(Pipeline.Workspace)/pre-commit-cache
+
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: ${{ parameters.python }}
+
+      - task: UseRubyVersion@0
+        inputs:
+          versionSpec: ${{ parameters.ruby }}
+
+      - script: |
+          echo "##vso[task.setvariable variable=PY]$(python -VV)"
+          echo "##vso[task.setvariable variable=RB]$(ruby -v)"
+        displayName: Set version variables
+
+      - task: Cache@2
+        inputs:
+          key: pre-commit | .pre-commit-config.yaml | "$(PY)" | "$(RB)"
+          path: $(PRE_COMMIT_HOME)
+
+      - script: python -m pip install --upgrade pre-commit
+        displayName: Install pre-commit
+
+      - script: pre-commit run --all-files
+        displayName: Run pre-commit
