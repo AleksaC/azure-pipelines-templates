@@ -1,7 +1,7 @@
 parameters:
   ruby: '>= 2.4'
   python: '3.8'
-  push_autofixes: true
+  pushAutofixes: true
 
 jobs:
   - job: precommit
@@ -35,3 +35,14 @@ jobs:
 
       - script: pre-commit run --all-files
         displayName: Run pre-commit
+
+      - ${{ if eq(parameters.pushAutofixes, true) }}:
+        - template: ../tasks/push-to-github.yml
+          parameters:
+            commitMessage: pre-commit autofixes
+            displayName: Push pre-commit fixes back to GitHub
+            condition: failed()
+            postPush:
+              - script: pre-commit run --all-files
+                displayName: Check if pre-commit errors have been fixed
+                condition: failed()
