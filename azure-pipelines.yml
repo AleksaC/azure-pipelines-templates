@@ -6,3 +6,4 @@ trigger:
 
 jobs:
   - template: jobs/pre-commit.yml
+  - template: jobs/sphinx-docs.yml

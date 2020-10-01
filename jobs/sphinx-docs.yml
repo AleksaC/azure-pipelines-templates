@@ -1,0 +1,32 @@
+parameters:
+  python: "3.8"
+  preGenerate:
+    script: python -m pip install --upgrade pip tox virtualenv
+    displayName: Install tox
+  generateCommand:
+    script: tox -e docs
+    displayName: Generate docs
+  postGenerate: []
+
+jobs:
+  - job: docs
+    pool:
+      vmImage: ubuntu-18.04
+    variables:
+      PIP_CACHE_DIR: $(Pipeline.Workspace)/.pip
+
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: ${{ parameters.python }}
+
+      - ${{ parameters.preGenerate }}
+
+      - ${{ parameters.generateCommand }}
+
+      - ${{ parameters.postGenerate }}
+
+      - template: ../tasks/push-to-github.yml
+        parameters:
+          commitMessage: Documentation updates
+          displayName: Push documentation updates
