@@ -1,2 +1,7 @@
 .idea
 .vscode
+
+venv
+.tox
+
+docs/_build
