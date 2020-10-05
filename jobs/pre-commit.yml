@@ -42,7 +42,7 @@ jobs:
             commitMessage: pre-commit autofixes
             displayName: Push pre-commit fixes back to GitHub
             condition: failed()
-            postPush:
-              - script: pre-commit run --all-files
-                displayName: Check if pre-commit errors have been fixed
-                condition: failed()
+
+        - script: pre-commit run --all-files
+          displayName: Check if pre-commit errors have been fixed
+          condition: failed()

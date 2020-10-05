@@ -1,9 +1,8 @@
 parameters:
   username: Azure Pipelines
-  commitMessage: ''
-  displayName: ''
+  commitMessage: ""
+  displayName: ""
   condition: succeeded()
-  postPush: []  # steps to run after the push has been completed
   skipCI: true  # determines whether to skip CI on pushed commit
 
 steps:
@@ -35,5 +34,3 @@ steps:
       BRANCH: $(Build.SourceBranchName)
     displayName: ${{ parameters.displayName }}
     condition: ${{ parameters.condition }}
-
-  - ${{ parameters.postPush }}
