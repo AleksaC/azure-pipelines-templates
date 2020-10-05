@@ -1,4 +1,5 @@
 parameters:
+  sshKeySecureFile: id_rsa
   username: Azure Pipelines
   commitMessage: ""
   displayName: ""
@@ -10,7 +11,7 @@ steps:
     inputs:
       knownHostsEntry: $(KNOWN_HOST_ENTRY)
       sshPublicKey: $(SSH_PUBLIC_KEY)
-      sshKeySecureFile: id_rsa
+      sshKeySecureFile: ${{ parameters.sshKeySecureFile }}
 
   - bash: |
       set -e
