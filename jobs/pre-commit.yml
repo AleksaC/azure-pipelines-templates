@@ -39,7 +39,9 @@ jobs:
       - ${{ if eq(parameters.pushAutofixes, true) }}:
         - template: ../tasks/push-to-github.yml
           parameters:
-            commitMessage: pre-commit autofixes
+            commitMessage: >
+              pre-commit autofixes
+              $(System.TeamFoundationCollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)
             displayName: Push pre-commit fixes back to GitHub
             condition: failed()
 

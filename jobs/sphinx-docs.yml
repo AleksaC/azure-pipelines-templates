@@ -28,5 +28,7 @@ jobs:
 
       - template: ../tasks/push-to-github.yml
         parameters:
-          commitMessage: Documentation updates
+          commitMessage: >
+            Documentation updates
+            $(System.TeamFoundationCollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)
           displayName: Push documentation updates
