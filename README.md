@@ -15,7 +15,7 @@ resources:
       type: github
       endpoint: AleksaC
       name: AleksaC/azure-pipelines-templates
-      ref: refs/tags/v0.0.1
+      ref: refs/tags/v0.0.2
 
 jobs:
   - template: jobs/pre-commit.yml@aleksac
