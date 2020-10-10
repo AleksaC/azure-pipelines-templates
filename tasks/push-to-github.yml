@@ -5,34 +5,41 @@ parameters:
   displayName: ""
   condition: succeeded()
   skipCI: true  # determines whether to skip CI on pushed commit
+parameters:
+  sshKeySecureFile: id_rsa
+  username: Azure Pipelines
+  commitMessage: ""
+  displayName: ""
+  condition: succeeded()
+  skipCI: true  # determines whether to skip CI on pushed commit
 
 steps:
-  - task: InstallSSHKey@0
-    inputs:
-      knownHostsEntry: $(KNOWN_HOST_ENTRY)
-      sshPublicKey: $(SSH_PUBLIC_KEY)
-      sshKeySecureFile: ${{ parameters.sshKeySecureFile }}
+  - ${{ if not(eq($(System.PullRequest.IsFork), true)) }}:
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: $(KNOWN_HOST_ENTRY)
+        sshPublicKey: $(SSH_PUBLIC_KEY)
+        sshKeySecureFile: ${{ parameters.sshKeySecureFile }}
 
-  - bash: |
-      set -e
-      if git status --porcelain . | grep -q .;
-      then
-        git config --global user.name "${{ parameters.username }}"
-        if [[ $REPOSITORY_URL_SSH == git@* ]]; then
-          REPOSITORY_URL_SSH=$REPOSITORY_URL
-        else
-          REPOSITORY_URL_SSH="git@github.com:$(echo $REPOSITORY_URL | sed 's/https:\/\/github.com\///g')"
+    - bash: |
+        set -e
+        if git status --porcelain . | grep -q .;
+        then
+          git config --global user.name "${{ parameters.username }}"
+          if [[ $REPOSITORY_URL_SSH == git@* ]]; then
+            REPOSITORY_URL_SSH=$REPOSITORY_URL
+          else
+            REPOSITORY_URL_SSH="git@github.com:$(echo $REPOSITORY_URL | sed 's/https:\/\/github.com\///g')"
+          fi
+          git remote set-url origin $REPOSITORY_URL_SSH  &> /dev/null
+          git add .
+          git commit --no-verify -m "${{ parameters.commitMessage }}$(${{ parameters.skipCI }} && echo ' [azp skip]')"
+          git diff HEAD~ HEAD
+          git pull --rebase origin "$BRANCH"
+          git push origin "HEAD:${BRANCH}"
         fi
-        git remote set-url origin $REPOSITORY_URL_SSH  &> /dev/null
-        git add .
-        git commit --no-verify -m "${{ parameters.commitMessage }}$(${{ parameters.skipCI }} && echo ' [azp skip]')"
-        git diff HEAD~ HEAD
-        git pull --rebase origin
-        echo "Pull successfuls"
-        git push origin "HEAD:${BRANCH}"
-      fi
-    env:
-      REPOSITORY_URL: $(Build.Repository.Uri)
-      BRANCH: $(Build.SourceBranchName)
-    displayName: ${{ parameters.displayName }}
-    condition: ${{ parameters.condition }}
+      env:
+        REPOSITORY_URL: $(Build.Repository.Uri)
+        BRANCH: $(Build.SourceBranchName)
+      displayName: ${{ parameters.displayName }}
+      condition: ${{ parameters.condition }}
