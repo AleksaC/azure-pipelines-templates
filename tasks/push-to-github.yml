@@ -34,4 +34,4 @@ steps:
       REPOSITORY_URL: $(Build.Repository.Uri)
       BRANCH: $(Build.SourceBranchName)
     displayName: ${{ parameters.displayName }}
-    condition: and(not(eq($(System.PullRequest.IsFork), true)), ${{ parameters.condition }})
+    condition: and(not(eq(variables['System.PullRequest.IsFork'], true)), ${{ parameters.condition }})
