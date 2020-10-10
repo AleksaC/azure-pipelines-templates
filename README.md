@@ -48,6 +48,17 @@ to github deploy key that was set up (default: `id_rsa`)
 
 For sample usage take a look at [`pre-commit.yml`](jobs/pre-commit.yml) job.
 
+#### [`deadsnakes-install.yml`](tasks/deadsnakes-install.yml)
+Install python interpreters using [deadsnakes ppa](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa).
+Can only be used with Ubuntu images.
+
+Parameters:
+- `version` - python version to install (default: `"3.8"`)
+- `condition` - [condition](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/conditions)
+on which it depends whether the push task will be executed (default: `suceed()`)
+
+For sample usage take a look at [`python-tests.yml`](jobs/python-tests.yml) job.
+
 ### Jobs 💼
 #### [`pre-commit.yml`](jobs/pre-commit.yml)
 Runs [`pre-commit`](https://pre-commit.com) on all files and optionally pushes

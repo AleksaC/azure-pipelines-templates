@@ -1,0 +1,13 @@
+parameters:
+  version: "3.9"
+  condition: succeeded()
+
+steps:
+  - script: |
+      sudo add-apt-repository ppa:deadsnakes/nightly
+      sudo apt-get update
+      sudo apt-get install -y --no-install-recommends \
+        python${{ parameters.version }}-dev \
+        python${{ parameters.version }}-distutils
+    displayName: Install python ${{ parameters.version }}
+    condition: ${{ parameters.condition }}

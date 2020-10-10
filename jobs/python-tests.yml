@@ -55,19 +55,15 @@ jobs:
         inputs:
           versionSpec: $(py)
 
-      - script: |
-          sudo add-apt-repository ppa:deadsnakes/nightly
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends python3.9-dev python3.9-distutils
-        displayName: Install python 3.9
-        condition: variables.ispy39
+      - template: ../tasks/deadsnakes-install.yml
+        parameters:
+          version: "3.9"
+          condition: variables.ispy39
 
-      - script: |
-          sudo add-apt-repository ppa:deadsnakes/nightly
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends python3.10-dev python3.10-distutils
-        displayName: Install python 3.10
-        condition: variables.ispy310
+      - template: ../tasks/deadsnakes-install.yml
+        parameters:
+          version: "3.10"
+          condition: variables.ispy310
 
       - ${{ parameters.preTest }}
 
