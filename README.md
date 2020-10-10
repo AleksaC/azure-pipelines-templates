@@ -31,6 +31,10 @@ Take a look at its [documentation](https://docs.microsoft.com/en-us/azure/devops
 to see how to set it up. Note that you need to set `KNOWN_HOST_ENTRY` and `SSH_PUBLIC_KEY`
 [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?tabs=classic%2Cbatch#set-variables-in-pipeline).
 Make sure to add quotes when adding the variables so they are parsed correctly.
+For security make sure that secrets aren't passed to builds for pull requests
+from forks (Edit -> Triggers -> Pull request validation). Since the secrets
+should not be passed to validation of PRs from forks the push task is not ran
+for those builds either.
 
 Parameters:
 - `username` - git username
