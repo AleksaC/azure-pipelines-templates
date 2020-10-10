@@ -60,9 +60,9 @@ Parameters:
 
 #### [`python-tests.yml`](jobs/python-tests.yml)
 Runs python tests using [`tox`](https://tox.readthedocs.io). Tests can be ran on
-multiple versions of python interpreter (`python 3.5-3.8`, `pypy3` and `python 3.9` on `linux`)
-as well as multiple operating systems (you need to define separate jobs for each
-operating system).
+multiple versions of python interpreter (`python 3.5-3.8` and `pypy3` on all
+platforms as well as `python 3.9` and `3.10` on `linux`) as well as multiple
+operating systems (you need to define separate jobs for each operating system).
 
 Parameters:
 - `toxenvs` - names of the tox environments to run

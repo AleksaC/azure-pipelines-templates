@@ -8,7 +8,7 @@ jobs:
   - template: jobs/python-tests.yml
     parameters:
       coverage: false
-      toxenvs: [ py35, py36, py37, py38, py39, pypy3 ]
+      toxenvs: [ py35, py36, py37, py38, py39, py310, pypy3 ]
 
   - template: jobs/python-tests.yml
     parameters:
