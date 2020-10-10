@@ -27,8 +27,7 @@ steps:
         git add .
         git commit --no-verify -m "${{ parameters.commitMessage }}$(${{ parameters.skipCI }} && echo ' [azp skip]')"
         git diff HEAD~ HEAD
-        echo "$BRANCH"
-        git pull --rebase origin "$BRANCH"
+        git pull --rebase origin
         git push origin "HEAD:${BRANCH}"
       fi
     env:
