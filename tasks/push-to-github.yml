@@ -5,13 +5,6 @@ parameters:
   displayName: ""
   condition: succeeded()
   skipCI: true  # determines whether to skip CI on pushed commit
-parameters:
-  sshKeySecureFile: id_rsa
-  username: Azure Pipelines
-  commitMessage: ""
-  displayName: ""
-  condition: succeeded()
-  skipCI: true  # determines whether to skip CI on pushed commit
 
 steps:
   - ${{ if not(eq($(System.PullRequest.IsFork), true)) }}:
