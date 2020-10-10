@@ -28,6 +28,7 @@ steps:
         git commit --no-verify -m "${{ parameters.commitMessage }}$(${{ parameters.skipCI }} && echo ' [azp skip]')"
         git diff HEAD~ HEAD
         git pull --rebase origin
+        echo "Pull successfuls"
         git push origin "HEAD:${BRANCH}"
       fi
     env:
