@@ -24,8 +24,7 @@ jobs:
             ${{ if or(eq(env, 'py38'), startsWith(env, 'py38-')) }}:
               py: "3.8"
             ${{ if or(eq(env, 'py39'), startsWith(env, 'py39-')) }}:
-              py: "3.8"
-              ispy39: true
+              py: "3.9"
             ${{ if or(eq(env, 'py310'), startsWith(env, 'py310-')) }}:
               py: "3.8"
               ispy310: true
@@ -54,11 +53,6 @@ jobs:
       - task: UsePythonVersion@0
         inputs:
           versionSpec: $(py)
-
-      - template: ../tasks/deadsnakes-install.yml
-        parameters:
-          version: "3.9"
-          condition: variables.ispy39
 
       - template: ../tasks/deadsnakes-install.yml
         parameters:

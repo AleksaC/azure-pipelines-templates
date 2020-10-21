@@ -21,7 +21,7 @@ jobs:
     parameters:
       os: macos
       coverage: false
-      toxenvs: [ py35, py36, py37, py38, pypy3 ]
+      toxenvs: [ py35, py36, py37, py38, py39, pypy3 ]
 
   - template: jobs/pre-commit.yml
 
