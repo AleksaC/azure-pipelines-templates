@@ -6,10 +6,10 @@ parameters:
   coverage: true
   additionalVariables: {}
   preTest: []
-  namePostflix: ""
+  namePostfix: ""
 
 jobs:
-  - job: ${{ format('tox_{0}{1}', parameters.os, parameters.namePostflix) }}
+  - job: ${{ format('tox_{0}{1}', parameters.os, parameters.namePostfix) }}
     strategy:
       matrix:
         ${{ each env in parameters.toxenvs }}:

@@ -82,7 +82,7 @@ Parameters:
 (default: `true`)
 - `additionalVariables` - additional job [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables)
 - `preTest` - list of tasks to run before running tests
-- `namePostflix` - string to be appended to the name of the job
+- `namePostfix` - string to be appended to the name of the job
 
 #### [`sphinx-docs.yml`](jobs/sphinx-docs.yml)
 Uses `sphinx-apidoc` to generate documentation for new modules and push them back
