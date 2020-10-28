@@ -1,0 +1,36 @@
+parameters:
+  node: "12.x"
+  artifactName: ""
+  artifactPath: ""
+  preInstall: []
+  installCommand: npm install
+  buildCommand: npm run build
+  additionalVariables: {}
+  namePostfix: ""
+
+jobs:
+  - job: ${{ format('npm_build{0}', parameters.namePostfix) }}
+    pool:
+      vmImage: ubuntu-18.04
+    variables:
+      ${{ insert }}: ${{ parameters.additionalVariables }}
+
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: ${{ parameters.node }}
+        displayName: Install Node.js
+
+      - ${{ parameters.preInstall }}
+
+      - script: ${{ parameters.installCommand }}
+        displayName: Run install command
+
+      - script: ${{ parameters.buildCommand }}
+        displayName: Run build command
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathtoPublish: ${{ parameters.artifactPath }}
+          artifactName: ${{ parameters.artifactName }}
+        displayName: Publish build artifact
