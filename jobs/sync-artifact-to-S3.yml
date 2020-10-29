@@ -5,7 +5,8 @@ parameters:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
 jobs:
-  - job: ${{ format('upload_{0}_artifact_to_S3', parameters.artifactName) }}
+  - job: upload_artifact_to_S3
+    displayName: Upload ${{ parameters.artifactName }} artifact to S3
     dependsOn: ${{ parameters.dependsOn }}
     condition: ${{ parameters.Condition }}
 

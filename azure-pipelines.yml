@@ -40,7 +40,7 @@ jobs:
 
   - template: jobs/sync-artifact-to-S3.yml
     parameters:
-      artifactName: "test-artifact"
-      bucketPath: "azure-pipelines-test-bucket"
+      artifactName: test-artifact
+      bucketPath: azure-pipelines-test-bucket
       dependsOn: npm_build
       condition: succeeded()
