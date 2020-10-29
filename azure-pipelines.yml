@@ -26,3 +26,21 @@ jobs:
   - template: jobs/pre-commit.yml
 
   - template: jobs/sphinx-docs.yml
+
+  - template: jobs/npm-build.yml
+    parameters:
+      artifactName: test-artifact
+      artifactPath: testdir
+
+  - template: jobs/npm-build.yml
+    parameters:
+      artifactName: test-artifact-yarn
+      artifactPath: testdir
+      namePostfix: _yarn
+
+  - template: jobs/sync-artifact-to-S3.yml
+    parameters:
+      artifactName: "test-artifact"
+      bucketPath: "azure-pipelines-test-bucket"
+      dependsOn: npm_build
+      condition: succeeded()

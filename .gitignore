@@ -8,3 +8,5 @@ venv
 .tox
 
 docs/_build
+
+testdir
