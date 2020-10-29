@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "build": "mkdir testdir && echo test > testdir/test.txt"
-  }
-}

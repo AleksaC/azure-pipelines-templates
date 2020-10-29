@@ -26,16 +26,3 @@ jobs:
   - template: jobs/pre-commit.yml
 
   - template: jobs/sphinx-docs.yml
-
-  - template: jobs/npm-build.yml
-    parameters:
-      artifactPath: testdir
-      artifactName: testdir
-
-  - template: jobs/npm-build.yml
-    parameters:
-      artifactPath: testdir
-      artifactName: testdir-yarn
-      installCommand: yarn install
-      buildCommand: yarn build
-      namepostfix: _yarn
