@@ -36,7 +36,7 @@ from forks (Edit -> Triggers -> Pull request validation). Since the secrets
 should not be passed to validation of PRs from forks the push task is not ran
 for those builds either.
 
-Parameters:
+**Parameters**:
 - `username` - git username
 - `commitMessage`
 - `displayName` - name to be displayed for the pushing task
@@ -52,7 +52,7 @@ For sample usage take a look at [`pre-commit.yml`](jobs/pre-commit.yml) job.
 Install python interpreters using [deadsnakes ppa](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa).
 Can only be used with Ubuntu images.
 
-Parameters:
+**Parameters**:
 - `version` - python version to install (default: `"3.8"`)
 - `condition` - [condition](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/conditions)
 on which it depends whether the push task will be executed (default: `suceed()`)
@@ -65,7 +65,7 @@ Runs [`pre-commit`](https://pre-commit.com) on all files and optionally pushes
 autofixes back to the branch that triggered the build. For more information look
 at the [official documentation](https://pre-commit.com/#azure-pipelines-example).
 
-Parameters:
+**Parameters**:
 - `python` - python version to be used by pre-commit (default: `"3.8"`)
 - `pushAutofixes` - whether to push autofixes (default: `true`)
 
@@ -75,7 +75,7 @@ multiple versions of python interpreter (`python 3.5-3.8` and `pypy3` on all
 platforms as well as `python 3.9` and `3.10` on `linux`) as well as multiple
 operating systems (you need to define separate jobs for each operating system).
 
-Parameters:
+**Parameters**:
 - `toxenvs` - names of the tox environments to run
 - `os` - `linux`, `windows` or `macos` (default: `linux`)
 - `coverage` - whether to [publish coverage artifact](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/test/publish-code-coverage-results)
@@ -88,11 +88,52 @@ Parameters:
 Uses `sphinx-apidoc` to generate documentation for new modules and push them back
 to the branch that triggered the build. Uses tox by default (see [sample config](tox.ini)).
 
-Parameters:
+**Parameters**:
 - `python` - python version (default: `"3.8"`)
 - `preGenerate` - list of steps to run before generating documentation
 - `generateCommand` - task for generating the docs (default: `script: tox -e docs`)
 - `postGenerate` - list of tasks to run after generating the docs
+
+#### [`npm-build.yml`](jobs/npm-build.yml)
+Runs a build for a node project (e.g. creating production webpack bundles) and
+publishes the resulting artifact.
+
+**Parameters**:
+- `node` - node version to use (default: `"12.x"`)
+- `artifactName`
+- `artifactPath` - path to the artifact to be published
+- `preInstall` - list of tasks to run before installing npm packages
+- `installCommand` - command to run for installing npm packages - useful if you
+want to use `yarn` instead of `npm` (default: `npm install`)
+- `buildCommand` - command to run for building the artifact (default: `npm run build`)
+- `additionalVariables` - additional job [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables)
+- `namePostfix` - string to be appended to the name of the job
+
+#### [`sync-artifact-to-S3.yml`](jobs/sync-artifact-to-S3.yml)
+Syncs an artifact to a directory within an S3 bucket, including deletion of the
+files that are no longer present in the artifact.
+
+**Parameters**:
+- `artifactName`
+- `bucketPath` - path to the directory where to upload the artifact starting with
+the bucket name
+- `dependsOn` - job or a list of jobs this job depends on
+- `condition` - [condition](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/conditions)
+on which it depends whether the artifact will be synced
+(default: `and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))`)
+
+**Example**:
+```yaml
+- template: jobs/sync-artifact-to-S3.yml@aleksac
+    parameters:
+      artifactName: artifact
+      bucketPath: foo/bar
+      dependsOn: build
+      condition: succeeded()
+```
+In the example above the contents of the directory `bar` in the bucket `foo` would
+be synced with the contents of the artifact `artifact` if a job named `build`
+succeeded before it.
 
 ## Contact 🙋‍♂️
 - [Personal website](https://aleksac.me)
