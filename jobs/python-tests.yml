@@ -64,7 +64,7 @@ jobs:
       - script: python -m pip install --upgrade tox setuptools virtualenv wheel
         displayName: Install tox
 
-      - script: tox
+      - bash: tox --discover $(which python)
         displayName: Run tox
 
       - ${{ if eq(parameters.coverage, true) }}:
