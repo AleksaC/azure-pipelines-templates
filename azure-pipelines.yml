@@ -1,9 +1,9 @@
 trigger:
-  batch: true
+  batch: "true"
   branches:
     include: [master, test-*]
   tags:
-    include: ['*']
+    include: ["*"]
 
 jobs:
   - template: jobs/python-tests.yml
@@ -44,3 +44,27 @@ jobs:
       bucketPath: azure-pipelines-test-bucket
       dependsOn: npm_build
       condition: succeeded()
+
+  - template: jobs/go-tests.yml
+    parameters:
+      preTest:
+        - bash: cp testing-go/* .
+          displayName: Hack to make coverage work
+      goVersions:
+        - "1.13"
+        - "1.14"
+        - "1.15"
+
+  - template: jobs/go-tests.yml
+    parameters:
+      os: windows
+      preTest:
+        - bash: cp testing-go/* .
+          displayName: Hack to make coverage work
+
+  - template: jobs/go-tests.yml
+    parameters:
+      os: osx
+      preTest:
+        - bash: cp testing-go/* .
+          displayName: Hack to make coverage work

@@ -10,3 +10,5 @@ venv
 docs/_build
 
 testdir
+
+coverage.out

@@ -1,0 +1,14 @@
+parameters:
+  goVersion: "1.14"
+  goPath: $(Agent.HomeDirectory)/go
+
+steps:
+  - task: GoTool@0
+    displayName: Use Go ${{ parameters.goVersion }}
+    inputs:
+      version: ${{ parameters.goVersion }}
+      goPath: ${{ parameters.goPath }}
+
+  - bash: |
+      echo '##vso[task.prependpath]$(GOPATH)/bin'
+    displayName: Create Go workspace

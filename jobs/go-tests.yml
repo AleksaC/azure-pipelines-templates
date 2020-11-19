@@ -1,0 +1,56 @@
+parameters:
+  namePostfix: ""
+  goVersions: ["1.14"]
+  os: linux
+  packages: ./...
+  coverage: true
+  preTest: []
+  additionalVariables: {}
+
+jobs:
+  - job: ${{ format('go_tests_{0}{1}', parameters.os, parameters.name_postfix) }}
+    strategy:
+      matrix:
+        ${{ each go in parameters.goVersions }}:
+          ${{ go }}:
+            go: ${{ go }}
+
+    pool:
+      ${{ if eq(parameters.os, 'linux') }}:
+        vmImage: ubuntu-18.04
+      ${{ if eq(parameters.os, 'windows') }}:
+        vmImage: windows-2019
+      ${{ if eq(parameters.os, 'osx') }}:
+        vmImage: macOS-10.14
+
+    variables:
+      ${{ if eq(parameters.coverage, true) }}:
+        covProfile: "-coverprofile coverage.out"
+      ${{ if ne(parameters.coverage, true) }}:
+        covProfile: ""
+      ${{ insert }}: ${{ parameters.additionalVariables }}
+
+    steps:
+      - template: ../tasks/setup-go.yml
+        parameters:
+          goVersion: $(go)
+
+      - ${{ parameters.preTest }}
+
+      - script: go test -v ${{ parameters.packages }} $(covProfile)
+        displayName: Run tests
+
+      - ${{ if eq(parameters.coverage, true) }}:
+        - script: |
+            go get github.com/axw/gocov/gocov
+            go get github.com/AlekSi/gocov-xml
+          displayName: Install packages for converting coverage output to cobertura format
+
+        - bash: gocov convert coverage.out | gocov-xml > coverage.xml
+          displayName: Convert coverage to cobertura format
+
+        - task: PublishCodeCoverageResults@1
+          inputs:
+            codeCoverageTool: cobertura
+            summaryFileLocation: coverage.xml
+          displayName: Publish coverage artifact
