@@ -59,6 +59,14 @@ on which it depends whether the push task will be executed (default: `suceed()`)
 
 For sample usage take a look at [`python-tests.yml`](jobs/python-tests.yml) job.
 
+#### [`setup-go.yml`](tasks/setup-go.yml)
+Set up go toolchain and environment.
+
+**Parameters**:
+- `goVersion` - version of go to use (default: `"1.14"`)
+- `goPath` - path to set as `goPath` input to [`GoTool`](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/go-tool?view=azure-devops)
+task (default: `$(Agent.HomeDirectory)/go`)
+
 ### Jobs 💼
 #### [`pre-commit.yml`](jobs/pre-commit.yml)
 Runs [`pre-commit`](https://pre-commit.com) on all files and optionally pushes
@@ -134,6 +142,21 @@ on which it depends whether the artifact will be synced
 In the example above the contents of the directory `bar` in the bucket `foo` would
 be synced with the contents of the artifact `artifact` if a job named `build`
 succeeded before it.
+
+#### [`go-tests.yml`](jobs/go-tests.yml)
+Runs golang tests with coverage. Tests can be ran for multiple versions of go compiler
+as well as multiple operating systems (you need to define separate jobs for each operating system).
+For coverage to work you need to run the job from the root of the go module.
+
+**Parameters**:
+- `goVersions` - versions of go compiler to use (default: `["1.14"]`)
+- `packages` - argument to `go test` (default: `./...`)
+- `os` - `linux`, `windows` or `macos` (default: `linux`)
+- `coverage` - whether to [publish coverage artifact](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/test/publish-code-coverage-results)
+(default: `true`)
+- `additionalVariables` - additional job [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables)
+- `preTest` - list of tasks to run before running tests
+- `namePostfix` - string to be appended to the name of the job
 
 ## Contact 🙋‍♂️
 - [Personal website](https://aleksac.me)

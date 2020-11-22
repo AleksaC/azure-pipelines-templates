@@ -1,3 +1,3 @@
-module testingpackage
+module testingmod
 
 go 1.14
